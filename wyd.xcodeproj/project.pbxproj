@@ -29,9 +29,22 @@
 		DF7439142D6BE1AE001D9405 /* wydUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wydUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DF600EDC2D6BE38A0010BE43 /* Exceptions for "wyd" folder in "wyd" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DF7438F92D6BE1AC001D9405 /* wyd */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DF7438FC2D6BE1AC001D9405 /* wyd */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DF600EDC2D6BE38A0010BE43 /* Exceptions for "wyd" folder in "wyd" target */,
+			);
 			path = wyd;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_TEAM = 8QU2M5M7VK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wyd/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -409,7 +423,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wyd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wydVishnu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -428,6 +442,7 @@
 				DEVELOPMENT_TEAM = 8QU2M5M7VK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wyd/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -438,7 +453,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wyd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wydVishnu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
