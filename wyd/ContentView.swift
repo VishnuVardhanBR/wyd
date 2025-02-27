@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Optional: Hex color initializer for convenience
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -33,17 +32,20 @@ extension Color {
 }
 
 struct ContentView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showOnboarding = false
+    @State private var showLogin = false
 
     var body: some View {
-        ZStack {
-            Color(red: 243/255, green: 241/255, blue: 234/255)
-                .ignoresSafeArea()
+        // If user is logged in, show GoalsView
+        if let user = authViewModel.user {
+            GoalsView(user: user)
+        } else {
+            // Otherwise, show splash screen
+            ZStack {
+                Color(hex: "#F3F1EA")
+                    .ignoresSafeArea()
 
-            if showOnboarding {
-                OnboardingView()
-                    .transition(.opacity)
-            } else {
                 VStack(spacing: 40) {
                     Text("wyd?")
                         .font(.custom("EBGaramond-Italic", size: 100))
@@ -68,8 +70,28 @@ struct ContentView: View {
                         .background(Color.black)
                         .cornerRadius(10)
                     }
+
+                    // Already have an account?
+                    Button(action: {
+                        showLogin = true
+                    }) {
+                        Text("Already have an account?")
+                            .font(.custom("EBGaramond-Italic", size: 16))
+                            .foregroundColor(.black)
+                            .underline()
+                    }
+                    .padding(.top, 10)
                 }
                 .padding()
+            }
+            // Present Onboarding or Login as full-screen covers
+            .fullScreenCover(isPresented: $showOnboarding) {
+                OnboardingView()
+                    .environmentObject(authViewModel)
+            }
+            .fullScreenCover(isPresented: $showLogin) {
+                LoginView()
+                    .environmentObject(authViewModel)
             }
         }
     }
@@ -78,5 +100,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthViewModel())
     }
 }
