@@ -1,6 +1,5 @@
 import SwiftUI
 
-// MARK: - Onboarding Steps (2-step flow)
 enum OnboardingStep: Int, CaseIterable {
     case motivation
     case priority
@@ -16,27 +15,29 @@ enum OnboardingStep: Int, CaseIterable {
 }
 
 struct OnboardingView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     @State private var currentStep: OnboardingStep = .motivation
     @State private var showQuestion: Bool = true
 
-    // Shared user inputs
     @State private var motivationAnswer: String = ""
     @State private var priorityText: String = ""
 
-    // Progress from 0..1
+    @State private var showRegister = false
+
     private var progress: CGFloat {
         CGFloat(currentStep.rawValue + 1) / CGFloat(OnboardingStep.totalSteps)
     }
 
     var body: some View {
         ZStack {
-            Color(red: 243/255, green: 241/255, blue: 234/255)
+            Color(hex: "#F3F1EA")
                 .ignoresSafeArea()
 
             VStack {
-                // Top Bar (Back / Next)
+                // Top Bar
                 HStack {
-                    // Back button appears after the first step
+                    // Back button on second step
                     if currentStep != .motivation {
                         Button(action: goBack) {
                             Text("Back")
@@ -45,19 +46,17 @@ struct OnboardingView: View {
                         }
                     }
                     Spacer()
-                    // Next button (or "Done") on top right
+                    // Next or Done
                     if currentStep != .priority {
-                        // Step 1
                         Button(action: goNext) {
                             Text("Next")
-                                .font(.custom("EBGaramond-Bold", size: 18)) // Heavier weight
+                                .font(.custom("EBGaramond-Bold", size: 18))
                                 .foregroundColor(.black)
                         }
                     } else {
-                        // Step 2
                         Button(action: finishOnboarding) {
                             Text("Done")
-                                .font(.custom("EBGaramond-Bold", size: 18)) // Heavier weight
+                                .font(.custom("EBGaramond-Bold", size: 18))
                                 .foregroundColor(.black)
                         }
                     }
@@ -88,9 +87,13 @@ struct OnboardingView: View {
                 Spacer()
             }
         }
+        .fullScreenCover(isPresented: $showRegister) {
+            RegisterView()
+                .environmentObject(authViewModel)
+        }
     }
 
-    // MARK: - Current Step View
+    // Step View
     @ViewBuilder
     private var currentStepView: some View {
         switch currentStep {
@@ -101,11 +104,9 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Navigation
+    // Navigation
     private func goNext() {
-        // Validate step
         guard validateCurrentStep() else { return }
-
         withAnimation(.easeInOut(duration: 0.3)) {
             showQuestion = false
         }
@@ -134,16 +135,12 @@ struct OnboardingView: View {
     }
 
     private func finishOnboarding() {
-        // Validate final step
         guard validateCurrentStep() else { return }
-
-        // For now, just print results (or close onboarding)
         print("Motivation: \(motivationAnswer)")
         print("Priority: \(priorityText)")
-        // TODO: Possibly pass these values to your LLM or store them in app state
+        showRegister = true
     }
 
-    // MARK: - Validation
     private func validateCurrentStep() -> Bool {
         switch currentStep {
         case .motivation:
@@ -154,10 +151,9 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - Progress Bar
+// Progress Bar
 struct ProgressBar: View {
     let progress: CGFloat
-
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -175,7 +171,7 @@ struct ProgressBar: View {
     }
 }
 
-// MARK: - Question 1: Motivation
+// Q1: Motivation
 struct MotivationQuestionView: View {
     @Binding var answer: String
     private let options = [
@@ -202,7 +198,7 @@ struct MotivationQuestionView: View {
     }
 }
 
-// MARK: - Question 2: Priority
+// Q2: Priority
 struct PriorityQuestionView: View {
     @Binding var text: String
 
@@ -222,20 +218,19 @@ struct PriorityQuestionView: View {
                 .background(Color.white)
                 .cornerRadius(8)
                 .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 1))
+                            .stroke(Color.gray, lineWidth: 1))
                 .padding(.horizontal)
         }
         .padding()
     }
 }
 
-// MARK: - Reusable Selectable Card
+// Selectable Card
 struct SelectableCard: View {
     let text: String
     let isSelected: Bool
     var onTap: () -> Void
 
-    // Updated colors
     private let unselectedColor = Color(hex: "#b4b3ae")
     private let selectedColor   = Color(hex: "#7a7975")
 
@@ -248,11 +243,5 @@ struct SelectableCard: View {
             .background(isSelected ? selectedColor : unselectedColor)
             .cornerRadius(12)
             .onTapGesture { onTap() }
-    }
-}
-
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
     }
 }
